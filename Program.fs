@@ -1,4 +1,4 @@
 ﻿[<EntryPoint>]
 let main argv =
-    printfn "Question 15: %A" Question15.answer
+    Question15.answer () |> printfn "Question 15:\n%A\n"
     0 // return an integer exit code

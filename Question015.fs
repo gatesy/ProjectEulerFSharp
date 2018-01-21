@@ -5,21 +5,38 @@
 //
 // How many such routes are there through a 20×20 grid?
 module Question15
-    let expand gridDimensions point =
-        match point with
-        | (x,y) -> [(x+1,y); (x,y+1)] 
-        |> List.filter (fun (x,y) -> x <= fst gridDimensions && y <= snd gridDimensions)
 
-    let expandPath gridDimensions path =
-        List.head path 
-        |> expand gridDimensions
-        |> List.map (fun newPoint -> newPoint :: path)
+let initGrid (gridWidth, gridHeight) =
+    let initValue x y =
+        match x,y with
+        | 0,0 -> 1L
+        | _,_ -> 0L
+    initValue |> Array2D.init (gridHeight + 1) (gridWidth + 1)
+    
+let propogateXPath (x,y) grid = 
+    match x with
+    | x when x+1 >= Array2D.length1 grid -> grid
+    | _ -> grid.[x+1, y] <- grid.[x+1,y] + grid.[x, y]
+           grid
 
-    let rec expandPaths gridDimensions paths =
-        let expandedPaths = paths |> List.collect (expandPath gridDimensions)
-        //printfn "%A" expandedPaths
-        match expandedPaths with
-        | [] -> paths
-        | _ -> expandPaths gridDimensions expandedPaths 
+let propogateYPath (x,y) grid =
+    match y with
+    | y when y+1 >= Array2D.length2 grid -> grid
+    | _ -> grid.[x, y+1] <- grid.[x,y+1] + grid.[x,y]
+           grid
 
-    let answer = expandPaths (15,15) [[(0,0)]] |> List.length
+let addPathsForPoint grid point =
+    grid |> propogateXPath point |> propogateYPath point
+
+let generatePoints (gridWidth, gridHeight) =
+    seq { for y in 0 .. gridHeight do for x in 0 .. gridWidth -> (x,y)}
+
+let bottomRightValue grid =
+    Array2D.get grid (Array2D.length1 grid - 1) (Array2D.length2 grid - 1)
+
+let answer () = 
+    let gridDimensions = (20,20)
+    let grid = initGrid gridDimensions
+    generatePoints gridDimensions 
+    |> Seq.fold addPathsForPoint grid
+    |> bottomRightValue
