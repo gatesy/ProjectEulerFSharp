@@ -46,6 +46,7 @@ let rec nameThatNumber n =
     | n when n > 100 && n < 1000 -> 
         let remainder = n % 100
         nameThatNumber (n - n % 100)  + "and" + nameThatNumber remainder
+    | _ -> ""
 
 let countLetters fromN toN =
     seq { fromN .. toN } |> Seq.sumBy (nameThatNumber >> String.length)
