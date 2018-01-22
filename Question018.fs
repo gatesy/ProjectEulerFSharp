@@ -34,7 +34,6 @@ module Question18
 
 // Given an accumulator row, propogate its values up to the given row, resulting in a new accumulator row.
 let rec propogateMax accRow row =
-    printfn "%A -- %A" accRow row
     match row, accRow with
     | _, [_] | [], _ -> []
     | _, [] -> row
