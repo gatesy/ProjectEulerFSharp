@@ -32,6 +32,25 @@
 // be solved by brute force, and requires a clever method! ;o)
 module Question18
 
-    
+// Given an accumulator row, propogate its values up to the given row, resulting in a new accumulator row.
+let rec propogateMax accRow row =
+    printfn "%A -- %A" accRow row
+    match row, accRow with
+    | _, [_] | [], _ -> []
+    | _, [] -> row
+    | (head1 :: tail1, head2 :: head3 :: tail2) -> 
+        head1 + (max head2 head3) :: propogateMax (head3 :: tail2) tail1 
 
-    let answer () = 1
+let parseLine (line : string) =
+    line.Split(' ') |> Array.map System.Int32.Parse |> Array.toList
+
+let readFile filename =
+    System.IO.File.ReadLines filename |> Seq.map parseLine
+
+let maxSumPath triangle =
+    triangle |> Seq.rev |> Seq.fold propogateMax [] |> Seq.last
+
+let maxSumPathFromFile filename =
+    readFile filename |> maxSumPath
+
+let answer () = maxSumPathFromFile "Question018.txt" 
