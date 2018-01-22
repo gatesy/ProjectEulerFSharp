@@ -5,4 +5,5 @@ let main argv =
     //Question18.answer () |> printfn "Question 18:\n%A\n"
     //Question67.answer () |> printfn "Question 67:\n%A\n"
     Question19.answer () |> printfn "Question 19:\n%A\n"
+    //Question20.answer () |> printfn "Question 20:\n%A\n"
     0 // return an integer exit code
