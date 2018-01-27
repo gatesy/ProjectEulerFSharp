@@ -11,4 +11,21 @@
 // Evaluate the sum of all the amicable numbers under 10000.
 module Question21
 
-let answer () = 1
+let addDivisors sum n =
+    [ n - 1 .. n .. Array.length sum - 1]
+    |> List.tail
+    |> List.iter (fun index -> sum.[index] <- sum.[index] + n)
+
+let sumDivisors sum =
+    [ 1 .. Array.length sum / 2]
+    |> List.iter (addDivisors sum)
+
+let findAmicablePair divisorSums a =
+    let b = Array.get divisorSums (a - 1)
+    if Array.get divisorSums (b - 1) = a then Some b else None
+
+let answer () = 
+    let divisorSums = Array.zeroCreate 40000
+    sumDivisors divisorSums
+    seq { 1 .. 10000 }
+    |> Seq.map (findAmicablePair divisorSums)
