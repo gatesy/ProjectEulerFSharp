@@ -10,5 +10,35 @@
 //
 // What is the total of all the name scores in the file?
 module Question22
+open System.IO
 
-let answer () = 1
+let implode (xs: char list) =
+    let sb = System.Text.StringBuilder(List.length xs)
+    xs |> List.iter (sb.Append >> ignore)
+    string sb
+
+let explode str =
+    [for c in str -> c]
+
+let letterValue c = 
+    (int c) - (int 'A') + 1
+
+let parseData filename =
+    let wordBuilder words nextChar =
+        match words, nextChar with
+        | _, '"' -> words // Ignore quotes
+        | _, ',' -> [] :: words // comma is the separator - start a new word
+        | (x::xs), _ -> (nextChar :: x) :: xs // add the character to the front of the current word
+        | [], _ -> failwith "state must always have an element"
+
+    File.ReadAllLines filename
+    |> Seq.concat
+    |> Seq.fold wordBuilder [[]]
+    |> List.map (List.rev >> implode)
+    |> List.sort
+    |> List.map (explode >> List.sumBy letterValue)
+    |> List.mapi (fun i wordValue -> (i+1) * wordValue)
+    |> List.sum
+
+let answer () = 
+    parseData "Question022.txt"
