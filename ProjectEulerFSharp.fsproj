@@ -14,6 +14,7 @@
     <Compile Include="Question019.fs" />
     <Compile Include="Question020.fs" />
     <Compile Include="Question021.fs" />
+    <Compile Include="Question022.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
