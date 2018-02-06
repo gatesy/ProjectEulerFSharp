@@ -18,14 +18,14 @@
 
 module Question23
 
-let divisorSumsArray upToN =
+let divisorSumsArray upTo =
     let addDivisors sum n =
         [ n - 1 .. n .. Array.length sum - 1]
         |> List.tail
         |> List.iter (fun index -> sum.[index] <- sum.[index] + n)
 
-    let sums = Array.zeroCreate upToN
-    [ 1 .. upToN / 2 ]
+    let sums = Array.zeroCreate upTo
+    [ 1 .. upTo / 2 ]
     |> List.iter (addDivisors sums)
     sums
 
@@ -34,11 +34,19 @@ let abundantNumbersArray divisorSums =
     |> Array.mapi (fun i sum -> (i+1, sum))
     |> Array.choose (fun (i,sum) -> if sum > i then Some i else None)
 
-let getSumOfTwoNumbers x numbers = 
-    let canMake x a fromNumbers =
-        match fromNumbers with
-        | [] -> None
-        | (n::ns) when a + n = x -> Some (a, n)
-        | (n::ns) when 
+let summableNumbers maxN numbers =
+    let canSum = Array.create maxN false
+    let addSumsFor numbers n =
+        Array.iter (fun y -> if n + y <= maxN then canSum.[n + y - 1] <- true) numbers
+    Array.iter (addSumsFor numbers) numbers
+    canSum
 
-let answer () = divisorSumsArray 28123 |> abundantNumbersArray
+let answer () =
+    let upTo = 28123
+
+    divisorSumsArray upTo
+    |> abundantNumbersArray
+    |> summableNumbers upTo
+    |> Array.mapi (fun i x -> if x then None else Some (i+1))
+    |> Array.choose id
+    |> Array.sum
