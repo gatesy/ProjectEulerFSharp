@@ -10,7 +10,6 @@
 // What is the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5, 6, 7, 8 and 9?
 
 module Question24
-open Question20
 
 let pickOneItem items =
     let itemsWithoutI i = items |> List.indexed |> List.choose (fun (j,x) -> if i <> j then Some x else None)
@@ -25,4 +24,4 @@ let rec permutations digits =
     | _ -> digits |> pickOneItem |> List.collect combine
 
 let answer () = 
-    permutations [0;1;2;3;4;5;6;7;8;9] |> List.item 1000000
+    permutations [0;1;2;3;4;5;6;7;8;9] |> List.item (1000000 - 1)
