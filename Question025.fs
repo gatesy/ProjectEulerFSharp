@@ -25,4 +25,4 @@ module Question25
 
 let fib = (1,1I,1I) |> Seq.unfold (fun (i,a,b) -> Some ((i, a), (i+1, b, a+b)))
 
-let answer () = fib |> Seq.find (fun (_, n) -> n >= 10I ** 999)
+let answer () = fib |> Seq.find (fun (_, n) -> n >= 10I ** 999) |> fst
