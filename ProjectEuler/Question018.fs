@@ -52,4 +52,4 @@ let maxSumPath triangle =
 let maxSumPathFromFile filename =
     readFile filename |> maxSumPath
 
-let answer () = maxSumPathFromFile "Question018.txt" 
+let answer dataFilename = maxSumPathFromFile dataFilename 

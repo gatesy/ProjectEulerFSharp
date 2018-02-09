@@ -40,5 +40,4 @@ let parseData filename =
     |> List.mapi (fun i wordValue -> (i+1) * wordValue)
     |> List.sum
 
-let answer () = 
-    parseData "Question022.txt"
+let answer dataFilename = parseData dataFilename
