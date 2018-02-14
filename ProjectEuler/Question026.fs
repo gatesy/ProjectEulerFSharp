@@ -19,15 +19,28 @@
 // its decimal fraction part.
 module Question26
 
-let rec fractionToDecimal numerator denominator =
+//let rec fractionToDecimal numerator denominator =
+//    let divides = numerator / denominator
+//    let remainder = numerator % denominator
+//
+//    match (divides,remainder) with
+//    | (0,0) -> []
+//    | (_,0) -> [divides]
+//    | (0,_) -> divides :: fractionToDecimal (numerator * 10) denominator
+//    | (_,_) -> divides :: fractionToDecimal (remainder * 10) denominator
+
+let fractionToDecimal (numerator, denominator) =
     let divides = numerator / denominator
     let remainder = numerator % denominator
 
     match (divides,remainder) with
-    | (0,0) -> []
-    | (_,0) -> [divides]
-    | (0,_) -> divides :: fractionToDecimal (numerator * 10) denominator
-    | (_,_) -> divides :: fractionToDecimal (remainder * 10) denominator
+        | (0,0) -> None
+        | (_,0) -> Some (divides, (0,1))
+        | (0,_) -> Some (divides, ((numerator * 10), denominator))
+        | (_,_) -> Some (divides, ((remainder * 10), denominator))
+
+
+let fractionToDecimalSeq = Seq.unfold fractionToDecimal
 
 let answer () = 
-    [ fractionToDecimal 1 2; fractionToDecimal 2 8; fractionToDecimal 3 100]
+    fractionToDecimalSeq (1,7) |> Seq.take 20 |> Seq.toList
