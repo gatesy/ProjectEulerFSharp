@@ -19,16 +19,6 @@
 // its decimal fraction part.
 module Question26
 
-//let rec fractionToDecimal numerator denominator =
-//    let divides = numerator / denominator
-//    let remainder = numerator % denominator
-//
-//    match (divides,remainder) with
-//    | (0,0) -> []
-//    | (_,0) -> [divides]
-//    | (0,_) -> divides :: fractionToDecimal (numerator * 10) denominator
-//    | (_,_) -> divides :: fractionToDecimal (remainder * 10) denominator
-
 let fractionToDecimal (numerator, denominator) =
     let divides = numerator / denominator
     let remainder = numerator % denominator
@@ -39,8 +29,36 @@ let fractionToDecimal (numerator, denominator) =
         | (0,_) -> Some (divides, ((numerator * 10), denominator))
         | (_,_) -> Some (divides, ((remainder * 10), denominator))
 
+// search for a recurring cycle. start by looking at the current element and the previous one,
+// then move to the current, previous and the two before those etc.
+let findRecurringOfLength numbers length =
+    match Array.length numbers with
+    | l when l < length * 2 
+        -> None
+    | l when Array.sub numbers (l - length) length = Array.sub numbers (l - length * 2) length 
+        -> Some (Array.sub numbers (l - length) length)
+    | _ 
+        -> None
+
+let rec trimZeros numbers = 
+    match numbers with
+    | 0 :: ns -> trimZeros ns
+    | _ -> numbers
+
+let findRecurring decimalSeq =
+    let seqGenerator = Seq.initInfinite (fun index -> index + 1)
+    let f 
+
+    Seq.map (fun length -> findRecurringOfLength decimalSeq length) seqGenerator
+    //seq [1 .. 10] |> Seq.map (fun n -> Seq.take n decimalSeq)
+    //[1 .. Array.length numbers / 2] |> List.map (findRecurringOfLength numbers)
 
 let fractionToDecimalSeq = Seq.unfold fractionToDecimal
 
 let answer () = 
-    fractionToDecimalSeq (1,7) |> Seq.take 20 |> Seq.toList
+    //seq [1 .. 10]
+    //|> Seq.map (fun denominator -> fractionToDecimalSeq (1, denominator))
+    
+    //fractionToDecimalSeq (6,7) |> Seq.take 20 |> Seq.toList
+    //findRecurringOfLength [|3;1;2;1;2;3|] 2
+    findRecurring [|1;3;3;1;3;1|] |> Seq.take 20
